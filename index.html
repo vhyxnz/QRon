@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta name="description" content="QRon — a modern QR design studio">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=3">
+  <title>QRon — QR Design Studio</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="QRon home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 44 44"><defs><linearGradient id="brandGradient" x1="4" y1="3" x2="40" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#9b84ff"/><stop offset=".48" stop-color="#7657ff"/><stop offset="1" stop-color="#4930c8"/></linearGradient></defs><rect x="2" y="2" width="40" height="40" rx="13" fill="url(#brandGradient)"/><path fill="#fff" fill-rule="evenodd" d="M11 11h9v9h-9v-9Zm3 3v3h3v-3h-3Zm10-3h9v9h-9v-9Zm3 3v3h3v-3h-3Zm-16 10h9v9h-9v-9Zm3 3v3h3v-3h-3Zm10-3h4v4h-4v-4Zm5 0h4v4h-4v-4Zm-5 5h4v4h-4v-4Zm7 2h3v3h-3v-3Z"/><circle cx="34" cy="34" r="5" fill="#171326"/><path d="m31.8 34 1.5 1.6 3-3.2" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span>QRon</span><em>STUDIO</em>
+      </a>
+      <nav class="topnav" aria-label="Primary">
+        <button class="nav-link active" data-view="editor">Create</button>
+        <button class="nav-link" data-view="designs">My Designs</button>
+        <button class="nav-link" data-view="templates">Templates</button>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">☾</button>
+        <button class="btn btn-dark small" id="saveTopBtn">Save design</button>
+        <button class="avatar">A</button>
+      </div>
+    </header>
+
+    <main id="editorView" class="workspace">
+      <aside class="panel content-panel">
+        <div class="panel-head">
+          <div><span class="eyebrow">01 / CONTENT</span><h1>Create your QR</h1></div>
+          <button class="icon-btn subtle" id="resetAll" title="Reset everything">↻</button>
+        </div>
+
+        <label class="field-label" for="qrType">QR code type</label>
+        <div class="type-picker">
+          <button id="typeButton" class="select-button" aria-expanded="false"><span class="type-icon">↗</span><b>URL / Website</b><span>⌄</span></button>
+          <div id="typeMenu" class="type-menu"></div>
+        </div>
+        <div id="dynamicFields" class="dynamic-fields"></div>
+
+        <div class="section-divider"></div>
+        <div class="section-title"><div><span class="eyebrow">QUICK START</span><h2>Choose a template</h2></div><button class="text-btn" data-view="templates">View all</button></div>
+        <div id="templateStrip" class="template-strip"></div>
+        <button class="btn btn-soft full" id="randomizeBtn">✦&nbsp;&nbsp; Randomize design</button>
+
+        <div class="saved-mini">
+          <div class="section-title"><h2>Recent designs</h2><button class="text-btn" data-view="designs">View all</button></div>
+          <div id="recentList" class="recent-list"><p class="empty-copy">Saved designs will appear here.</p></div>
+        </div>
+      </aside>
+
+      <section class="preview-stage">
+        <div class="preview-toolbar">
+          <div class="device-switch"><button class="active">Canvas</button><button>Card</button><button>Dark</button></div>
+          <div class="zoom-controls"><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">+</button><button id="resetZoom">⌖</button></div>
+        </div>
+        <div class="canvas-wrap" id="canvasWrap">
+          <div id="qrFrame" class="qr-frame frame-none">
+            <div id="qrCanvas" class="qr-canvas" aria-label="Live QR code preview"></div>
+            <div id="frameLabel" class="frame-label">SCAN ME</div>
+          </div>
+        </div>
+        <div class="reliability-card">
+          <div class="score-ring" id="scoreRing"><span id="scoreValue">96</span></div>
+          <div class="reliability-copy"><strong id="scoreTitle">Excellent scanability</strong><span id="scoreHint">High contrast · Level H correction</span></div>
+          <button class="btn btn-white small" id="testScanBtn">⌗ Test scan</button>
+        </div>
+        <div id="warningBar" class="warning-bar hidden"></div>
+      </section>
+
+      <aside class="panel design-panel">
+        <div class="panel-head">
+          <div><span class="eyebrow">02 / DESIGN</span><h1>Make it yours</h1></div>
+          <button class="icon-btn subtle" id="resetDesign" title="Reset design">↻</button>
+        </div>
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="style">Style</button>
+          <button class="tab" data-tab="color">Color</button>
+          <button class="tab" data-tab="image">Image</button>
+          <button class="tab" data-tab="frame">Frame</button>
+        </div>
+
+        <div class="tab-panel active" data-panel="style">
+          <label class="field-label">Module style</label>
+          <div class="style-grid" id="moduleStyles">
+            <button class="style-choice active" data-style="square"><span class="module-demo square"></span>Square</button>
+            <button class="style-choice" data-style="rounded"><span class="module-demo rounded"></span>Rounded</button>
+            <button class="style-choice" data-style="dots"><span class="module-demo dots"></span>Dots</button>
+            <button class="style-choice" data-style="soft"><span class="module-demo soft"></span>Soft</button>
+          </div>
+          <label class="field-label">Finder style</label>
+          <div class="segmented" id="finderStyles"><button class="active" data-finder="square">Square</button><button data-finder="rounded">Rounded</button><button data-finder="circle">Circle</button></div>
+          <div class="range-row"><label>QR size <output id="sizeOut">320 px</output></label><input id="qrSize" type="range" min="220" max="420" value="320"></div>
+          <div class="range-row"><label>Quiet zone <output id="quietOut">16 px</output></label><input id="quietZone" type="range" min="4" max="32" value="16"></div>
+          <div class="range-row"><label>Module spacing <output id="spacingOut">0%</output></label><input id="moduleGap" type="range" min="0" max="25" value="0"></div>
+          <label class="field-label">Error correction</label>
+          <div class="segmented four" id="errorLevels"><button data-level="L">L</button><button data-level="M">M</button><button data-level="Q">Q</button><button class="active" data-level="H">H</button></div>
+        </div>
+
+        <div class="tab-panel" data-panel="color">
+          <div class="switch-row"><div><strong>Gradient fill</strong><span>Blend two colors</span></div><label class="switch"><input id="useGradient" type="checkbox"><i></i></label></div>
+          <div class="color-row"><label>Foreground <span><input id="fgColor" type="color" value="#101826"><input id="fgHex" value="#101826"></span></label></div>
+          <div class="color-row gradient-only disabled"><label>Gradient end <span><input id="gradientColor" type="color" value="#7657ff"><input id="gradientHex" value="#7657FF"></span></label></div>
+          <div class="gradient-only disabled"><label class="field-label">Gradient type</label><div class="segmented"><button class="active" data-gradient="linear">Linear</button><button data-gradient="radial">Radial</button></div><div class="range-row"><label>Direction <output id="angleOut">135°</output></label><input id="gradientAngle" type="range" min="0" max="360" value="135"></div></div>
+          <div class="color-row"><label>Background <span><input id="bgColor" type="color" value="#ffffff"><input id="bgHex" value="#FFFFFF"></span></label></div>
+          <div class="switch-row"><div><strong>Transparent background</strong><span>Best for digital use</span></div><label class="switch"><input id="transparentBg" type="checkbox"><i></i></label></div>
+          <div class="color-row"><label>Finder color <span><input id="finderColor" type="color" value="#101826"><input id="finderHex" value="#101826"></span></label></div>
+        </div>
+
+        <div class="tab-panel" data-panel="image">
+          <label id="dropZone" class="drop-zone"><input id="logoUpload" type="file" accept="image/*"><span class="upload-icon">⌑</span><strong>Drop your logo here</strong><small>or click to browse · PNG, JPG, SVG</small></label>
+          <div class="builtins"><label class="field-label">Or choose an icon</label><div id="builtinIcons" class="icon-options"><button data-icon="none" class="active">None</button><button data-icon="link">↗</button><button data-icon="heart">♥</button><button data-icon="star">★</button><button data-icon="bolt">ϟ</button></div></div>
+          <div class="range-row"><label>Image size <output id="logoSizeOut">22%</output></label><input id="logoSize" type="range" min="12" max="32" value="22"></div>
+          <div class="range-row"><label>Padding <output id="logoPadOut">8 px</output></label><input id="logoPadding" type="range" min="0" max="18" value="8"></div>
+          <div class="range-row"><label>Opacity <output id="logoOpacityOut">100%</output></label><input id="logoOpacity" type="range" min="30" max="100" value="100"></div>
+          <label class="field-label">Image shape</label><div class="segmented" id="logoShapes"><button class="active" data-shape="rounded">Rounded</button><button data-shape="circle">Circle</button><button data-shape="square">Square</button></div>
+          <button class="btn btn-soft full" id="removeLogo">Remove image</button>
+        </div>
+
+        <div class="tab-panel" data-panel="frame">
+          <label class="field-label">Frame style</label>
+          <div class="frame-grid" id="frameStyles"><button class="active" data-frame="none">None</button><button data-frame="border">Border</button><button data-frame="card">Card</button><button data-frame="label">Label</button><button data-frame="badge">Badge</button><button data-frame="social">Social</button></div>
+          <label class="input-label">Frame text<input id="frameText" value="SCAN ME" maxlength="24"></label>
+          <div class="color-row"><label>Frame color <span><input id="frameColor" type="color" value="#7657ff"><input id="frameHex" value="#7657FF"></span></label></div>
+          <div class="color-row"><label>Text color <span><input id="textColor" type="color" value="#ffffff"><input id="textHex" value="#FFFFFF"></span></label></div>
+          <div class="range-row"><label>Corner radius <output id="radiusOut">24 px</output></label><input id="frameRadius" type="range" min="0" max="40" value="24"></div>
+        </div>
+
+        <div class="export-card">
+          <div class="export-meta"><span>Ready to export</span><strong id="exportMeta">PNG · 1024 × 1024 px</strong></div>
+          <button class="btn btn-primary full" id="downloadBtn">Download QR Code <span>↓</span></button>
+          <button class="btn btn-soft export-toggle full" id="exportToggle">Export options⌄</button>
+          <div id="exportOptions" class="export-options">
+            <div class="two-col"><label class="input-label">Format<select id="exportFormat"><option>PNG</option><option>JPG</option><option>SVG</option><option>PDF</option></select></label><label class="input-label">Resolution<select id="exportScale"><option value="2">2× · 640 px</option><option value="3">3× · 960 px</option><option value="4" selected>4× · 1280 px</option></select></label></div>
+            <label class="input-label">File name<input id="fileName" value="qron-code"></label>
+            <div class="switch-row compact"><div><strong>Include frame</strong></div><label class="switch"><input id="includeFrame" type="checkbox" checked><i></i></label></div>
+            <div class="switch-row compact"><div><strong>Include logo</strong></div><label class="switch"><input id="includeLogo" type="checkbox" checked><i></i></label></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <section id="libraryView" class="library-view hidden">
+      <div class="library-head"><div><span class="eyebrow" id="libraryEyebrow">YOUR COLLECTION</span><h1 id="libraryTitle">Saved designs</h1><p id="librarySub">Pick up where you left off or reuse a favorite.</p></div><div class="library-actions"><label class="search-box">⌕<input id="designSearch" placeholder="Search designs"></label><button class="btn btn-dark" data-view="editor">+ Create QR</button></div></div>
+      <div id="libraryGrid" class="library-grid"></div>
+    </section>
+
+    <nav class="mobile-nav">
+      <button class="active" data-mobiletab="content">▣<span>Content</span></button><button data-mobiletab="style">◈<span>Style</span></button><button data-mobiletab="image">◇<span>Image</span></button><button data-mobiletab="frame">▢<span>Frame</span></button><button data-mobiletab="export">⇩<span>Export</span></button>
+    </nav>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <div id="scanModal" class="modal hidden"><div class="modal-card"><button class="modal-close">×</button><div class="scan-beam"></div><div class="mini-qr" id="miniQr"></div><span class="success-icon">✓</span><h2>QR code verified</h2><p>Your code structure and contrast look ready to scan.</p><button class="btn btn-primary full modal-close">Done</button></div></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script src="app.js?v=4"></script>
+</body>
+</html>
