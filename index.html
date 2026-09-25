@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=10">
   <title>QRon — QR Design Studio</title>
 </head>
 <body>
@@ -28,6 +28,8 @@
         <button class="nav-link" data-view="templates">Templates</button>
       </nav>
       <div class="header-actions">
+        <span id="saveStatus" class="save-status">Ready</span>
+        <button class="btn btn-soft small hidden" id="installBtn">Install app</button>
         <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">☾</button>
         <button class="btn btn-dark small" id="saveTopBtn">Save design</button>
         <button class="avatar">A</button>
@@ -62,7 +64,7 @@
       <section class="preview-stage">
         <div class="preview-toolbar">
           <div class="device-switch"><button class="active">Canvas</button><button>Card</button><button>Dark</button></div>
-          <div class="zoom-controls"><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">+</button><button id="resetZoom">⌖</button></div>
+          <div class="preview-actions"><div class="history-controls"><button id="undoBtn" aria-label="Undo" title="Undo">↶</button><button id="redoBtn" aria-label="Redo" title="Redo">↷</button></div><div class="zoom-controls"><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">+</button><button id="resetZoom">⌖</button></div></div>
         </div>
         <div class="canvas-wrap" id="canvasWrap">
           <div id="qrFrame" class="qr-frame frame-none">
@@ -139,6 +141,7 @@
         <div class="export-card">
           <div class="export-meta"><span>Ready to export</span><strong id="exportMeta">PNG · 1024 × 1024 px</strong></div>
           <button class="btn btn-primary full" id="downloadBtn">Download QR Code <span>↓</span></button>
+          <button class="btn btn-soft full" id="shareBtn">Share QR Code</button>
           <button class="btn btn-soft export-toggle full" id="exportToggle">Export options⌄</button>
           <div id="exportOptions" class="export-options">
             <div class="two-col"><label class="input-label">Format<select id="exportFormat"><option>PNG</option><option>JPG</option><option>SVG</option><option>PDF</option></select></label><label class="input-label">Resolution<select id="exportScale"><option value="2">2× · 640 px</option><option value="3">3× · 960 px</option><option value="4" selected>4× · 1280 px</option></select></label></div>
@@ -151,7 +154,7 @@
     </main>
 
     <section id="libraryView" class="library-view hidden">
-      <div class="library-head"><div><span class="eyebrow" id="libraryEyebrow">YOUR COLLECTION</span><h1 id="libraryTitle">Saved designs</h1><p id="librarySub">Pick up where you left off or reuse a favorite.</p></div><div class="library-actions"><label class="search-box">⌕<input id="designSearch" placeholder="Search designs"></label><button class="btn btn-dark" data-view="editor">+ Create QR</button></div></div>
+      <div class="library-head"><div><span class="eyebrow" id="libraryEyebrow">YOUR COLLECTION</span><h1 id="libraryTitle">Saved designs</h1><p id="librarySub">Pick up where you left off or reuse a favorite.</p></div><div class="library-actions"><label class="search-box">⌕<input id="designSearch" placeholder="Search designs"></label><button class="btn btn-soft" id="importDesignsBtn">Import</button><button class="btn btn-soft" id="exportDesignsBtn">Export</button><input id="importDesignsFile" type="file" accept="application/json,.json" hidden><button class="btn btn-dark" data-view="editor">+ Create QR</button></div></div>
       <div id="libraryGrid" class="library-grid"></div>
     </section>
 
@@ -161,9 +164,9 @@
   </div>
 
   <div id="toast" class="toast" role="status"></div>
-  <div id="scanModal" class="modal hidden"><div class="modal-card"><button class="modal-close">×</button><div class="scan-beam"></div><div class="mini-qr" id="miniQr"></div><span class="success-icon">✓</span><h2>QR code verified</h2><p>Your code structure and contrast look ready to scan.</p><button class="btn btn-primary full modal-close">Done</button></div></div>
+  <div id="scanModal" class="modal hidden"><div class="modal-card"><button class="modal-close">×</button><div class="scan-beam"></div><div class="mini-qr" id="miniQr"></div><span class="success-icon">✓</span><h2 id="scanTitle">Testing QR code…</h2><p id="scanMessage">Checking the rendered image and encoded content.</p><button class="btn btn-primary full modal-close">Done</button></div></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
-  <script src="app.js?v=10"></script>
+  <script src="app.js?v=13"></script>
 </body>
 </html>
